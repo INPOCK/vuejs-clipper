@@ -255,7 +255,9 @@ export default {
   },
   data () {
     return {
-      imgRatio: NaN
+      imgRatio: NaN,
+      imgwidth: 0,
+      imgheight: 0,
     }
   },
   computed: {
@@ -279,6 +281,15 @@ export default {
     translateStyle: function () {
       let left = this.bgTL$.left
       let top = this.bgTL$.top
+
+      let calcRatio = this.bgWH$
+      
+      if (calcRatio === this.minScale) {
+        this.bgTL$.left = 0
+        return {
+          transform: `translate(${0}%,${top}%) !important` 
+        }
+      }
       return {
         transform: `translate(${left}%,${top}%) !important`
       }
@@ -354,12 +365,15 @@ export default {
       this.imgRatio = this.imgEl.naturalWidth / this.imgEl.naturalHeight
       this.stemEl.width = this.imgEl.naturalWidth
       this.stemEl.height = this.imgEl.naturalHeight
+      this.imgwidth = this.imgEl.naturalWidth
+      this.imgheight = this.imgEl.naturalHeight
       this.resetData()
       this.callPreview('setData', {
         src: this.src,
         bgColor: this.bgColor
       })
     },
+    // ratio 계산해서 최소 스케일 비율에 맞춤
     resetData: function () {
       this.setTL$.next({ left: 0, top: 0 })
       const scale = (this.ratio > this.imgRatio)
