@@ -25,6 +25,7 @@ const fixedMethods = {
   isDragElement: function (e) {
     return this.wrapEl.contains(e.target)
   },
+  // 드래그 시작하면 처음 1회에 시작
   dragDownPos: function (e) {
     const translatePos = this.translatePos()
     const scalePos = this.scalePos()
@@ -34,16 +35,51 @@ const fixedMethods = {
       clientX: e.clientX,
       clientY: e.clientY
     }
+    console.log(offset)
     return offset
   },
   delta: function ({ down, move }) {
-    const left = move.clientX - down.clientX + down.left
-    const top = move.clientY - down.clientY + down.top
-    return { left, top }
+    let left = move.clientX + down.left - down.clientX 
+    let top = move.clientY + down.top - down.clientY 
+    // down.left, down.top 중심점
+    // down.clientX, Y 클릭한 곳 기준으로 잡음
+    
+    // console.log(move.clientX, down.left, down.clientX)
+    console.log(left, top)
+
+
+
+    const areaPos = this.areaEl.getBoundingClientRect()
+    const translatePos = this.translatePos()
+    const imgW = this.imgEl.naturalWidth
+    const swidth = areaPos.width - this.border * 2
+    const sheight = areaPos.height - this.border * 2
+    const viewL = areaPos.left - translatePos.left + this.border
+    const viewT = areaPos.top - translatePos.top + this.border
+    // console.log(areaPos.width, areaPos.height)
+    // console.log(swidth, sheight, imgW)
+    // console.log(viewL, viewT)
+    
+    const pos = this.getDrawPos()
+    const leftside = pos.pos.sx
+    const rightside = pos.pos.sx+pos.pos.swidth
+    console.log(leftside, rightside)
+    if (leftside < 1) {
+      let flag = 1
+      if (flag) {
+        let fixedLeft = left
+        return { fixedLeft, top }
+      }
+      return {}
+    } else {
+      let flag = 0
+      return { left, top }
+    }
   },
   towPointsTouches: function (e) {
     return e.touches
   },
+  // 줌이벤트시 Origin 고정시켜줌
   setOrigin: function (down) {
     return {
       down: [down[0], down[1]],
