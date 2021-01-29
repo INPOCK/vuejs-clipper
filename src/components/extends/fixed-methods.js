@@ -44,18 +44,35 @@ const fixedMethods = {
     // down.left, down.top 중심점
     // down.clientX, Y 클릭한 곳 기준으로 잡음
     
-    // console.log(move.clientX, down.left, down.clientX)
-    console.log(left, top)
-
-
-
+    // 클리퍼 영역 
     const areaPos = this.areaEl.getBoundingClientRect()
+    // console.log(areaPos.width, areaPos.height)
+
+    // ?
     const translatePos = this.translatePos()
+    // console.log(translatePos.left, translatePos.top)
+
+    const viewL = areaPos.left - translatePos.left + this.border
+    const viewT = areaPos.top - translatePos.top + this.border
+    // console.log(viewL, viewT)
+
+    // 마우스로 집은 곳 좌표
+    // console.log(- down.clientX + down.left, - down.clientY + down.top)
+
+    const scale = this.scalePos()
+    // 사진의 너비, 높이
+    // console.log(scale.width, scale.height) 
+    // 600, 402
+
+
+
+    // const areaPos = this.areaEl.getBoundingClientRect()
+    // const translatePos = this.translatePos()
     const imgW = this.imgEl.naturalWidth
     const swidth = areaPos.width - this.border * 2
     const sheight = areaPos.height - this.border * 2
-    const viewL = areaPos.left - translatePos.left + this.border
-    const viewT = areaPos.top - translatePos.top + this.border
+    // const viewL = areaPos.left - translatePos.left + this.border
+    // const viewT = areaPos.top - translatePos.top + this.border
     // console.log(areaPos.width, areaPos.height)
     // console.log(swidth, sheight, imgW)
     // console.log(viewL, viewT)

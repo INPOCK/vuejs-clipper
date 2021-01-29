@@ -278,6 +278,27 @@ export default {
         transform: `scale(${width}) !important`
       }
     },
+    // translateStyle: function () {
+    //   let left = this.bgTL$.left
+    //   let top = this.bgTL$.top
+
+    //   // imgLeft, imgRight = 
+    //   // 두 비율 값 전부 고정 값
+
+    //   let stdLeft = (this.bgWH$-0.650667)*17.5*3
+    //   // let stdTop = 12.5 * this.bgWH$
+    //   let stdTop = (this.bgWH$-0.650667)*5*3
+
+    //   if (Math.abs(left) > stdLeft) {
+    //     left = left < 0 ? -stdLeft : stdLeft
+    //   }
+    //   if (Math.abs(top) > stdTop) {
+    //     top = top < 0 ? -stdTop : stdTop
+    //   }
+    //   return {
+    //     transform: `translate(${left}%,${top}%) !important`
+    //   }
+    // },
     translateStyle: function () {
       let left = this.bgTL$.left
       let top = this.bgTL$.top
