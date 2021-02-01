@@ -11,14 +11,17 @@
       />
       <div class="vuejs-clipper-fixed__img-center">
         <canvas class="vuejs-clipper-fixed__stem-bg js-stem-bg" />
+        <!-- 이미지 스케일 조절 -->
         <div
           class="vuejs-clipper-fixed__img-scale js-img-scale"
           :style="scaleStyle"
         >
+          <!-- 이미지 위치 조절 -->
           <div
             class="vuejs-clipper-fixed__img-translate js-img-translate"
             :style="translateStyle"
           >
+            <!-- 이미지 회전 조절 -->
             <img
               :src="src"
               class="vuejs-clipper-fixed__img js-img"
@@ -255,9 +258,7 @@ export default {
   },
   data () {
     return {
-      imgRatio: NaN,
-      imgwidth: 0,
-      imgheight: 0,
+      imgRatio: NaN
     }
   },
   computed: {
@@ -274,43 +275,26 @@ export default {
     },
     scaleStyle: function () {
       let width = this.bgWH$
+      // console.log(width)
       return {
         transform: `scale(${width}) !important`
       }
     },
-    // translateStyle: function () {
-    //   let left = this.bgTL$.left
-    //   let top = this.bgTL$.top
-
-    //   // imgLeft, imgRight = 
-    //   // 두 비율 값 전부 고정 값
-
-    //   let stdLeft = (this.bgWH$-0.650667)*17.5*3
-    //   // let stdTop = 12.5 * this.bgWH$
-    //   let stdTop = (this.bgWH$-0.650667)*5*3
-
-    //   if (Math.abs(left) > stdLeft) {
-    //     left = left < 0 ? -stdLeft : stdLeft
-    //   }
-    //   if (Math.abs(top) > stdTop) {
-    //     top = top < 0 ? -stdTop : stdTop
-    //   }
-    //   return {
-    //     transform: `translate(${left}%,${top}%) !important`
-    //   }
-    // },
     translateStyle: function () {
       let left = this.bgTL$.left
       let top = this.bgTL$.top
 
-      let calcRatio = this.bgWH$
-      
-      if (calcRatio === this.minScale) {
-        this.bgTL$.left = 0
-        return {
-          transform: `translate(${0}%,${top}%) !important` 
-        }
-      }
+      // 두 비율 값 전부 고정 값
+
+      // let stdLeft = 17.4
+      // let stdTop = 6.2
+      // if (Math.abs(left) > stdLeft) {
+      //   left = left < 0 ? -stdLeft : stdLeft
+      // }
+      // if (Math.abs(top) > stdTop) {
+      //   top = top < 0 ? -stdTop : stdTop
+      // }
+
       return {
         transform: `translate(${left}%,${top}%) !important`
       }
@@ -386,15 +370,12 @@ export default {
       this.imgRatio = this.imgEl.naturalWidth / this.imgEl.naturalHeight
       this.stemEl.width = this.imgEl.naturalWidth
       this.stemEl.height = this.imgEl.naturalHeight
-      this.imgwidth = this.imgEl.naturalWidth
-      this.imgheight = this.imgEl.naturalHeight
       this.resetData()
       this.callPreview('setData', {
         src: this.src,
         bgColor: this.bgColor
       })
     },
-    // ratio 계산해서 최소 스케일 비율에 맞춤
     resetData: function () {
       this.setTL$.next({ left: 0, top: 0 })
       const scale = (this.ratio > this.imgRatio)
