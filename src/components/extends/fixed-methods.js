@@ -64,7 +64,7 @@ const fixedMethods = {
       left = left < 0 ? -newL : newL
     }
 
-    if (Math.abs(top) > 0.005 && Math.abs(top) > newT) {
+    if (Math.abs(left) > 0.005 && Math.abs(top) > newT) {
       top = top < 0 ? -newT+2 : newT
     }
 
