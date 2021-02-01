@@ -25,7 +25,6 @@ const fixedMethods = {
   isDragElement: function (e) {
     return this.wrapEl.contains(e.target)
   },
-  // 드래그 시작하면 처음 1회에 시작
   dragDownPos: function (e) {
     const translatePos = this.translatePos()
     const scalePos = this.scalePos()
@@ -35,26 +34,21 @@ const fixedMethods = {
       clientX: e.clientX,
       clientY: e.clientY
     }
-    console.log(offset)
     return offset
   },
   delta: function ({ down, move }) {
-    let left = move.clientX + down.left - down.clientX 
-    let top = move.clientY + down.top - down.clientY 
-    // down.left, down.top 중심점
-    // down.clientX, Y 클릭한 곳 기준으로 잡음
-    
+    let left = move.clientX - down.clientX + down.left
+    let top = move.clientY - down.clientY + down.top
+    // console.log('Mouse Move : ', left, top)
+
     // 클리퍼 영역 
     const areaPos = this.areaEl.getBoundingClientRect()
+    // 클리퍼 너비, 클리퍼 높이
     // console.log(areaPos.width, areaPos.height)
 
     // ?
-    const translatePos = this.translatePos()
+    // const translatePos = this.translatePos()
     // console.log(translatePos.left, translatePos.top)
-
-    const viewL = areaPos.left - translatePos.left + this.border
-    const viewT = areaPos.top - translatePos.top + this.border
-    // console.log(viewL, viewT)
 
     // 마우스로 집은 곳 좌표
     // console.log(- down.clientX + down.left, - down.clientY + down.top)
@@ -62,41 +56,23 @@ const fixedMethods = {
     const scale = this.scalePos()
     // 사진의 너비, 높이
     // console.log(scale.width, scale.height) 
-    // 600, 402
 
+    let newL = (scale.width - areaPos.width) / 2
+    let newT = -(scale.top - areaPos.top)
 
-
-    // const areaPos = this.areaEl.getBoundingClientRect()
-    // const translatePos = this.translatePos()
-    const imgW = this.imgEl.naturalWidth
-    const swidth = areaPos.width - this.border * 2
-    const sheight = areaPos.height - this.border * 2
-    // const viewL = areaPos.left - translatePos.left + this.border
-    // const viewT = areaPos.top - translatePos.top + this.border
-    // console.log(areaPos.width, areaPos.height)
-    // console.log(swidth, sheight, imgW)
-    // console.log(viewL, viewT)
-    
-    const pos = this.getDrawPos()
-    const leftside = pos.pos.sx
-    const rightside = pos.pos.sx+pos.pos.swidth
-    console.log(leftside, rightside)
-    if (leftside < 1) {
-      let flag = 1
-      if (flag) {
-        let fixedLeft = left
-        return { fixedLeft, top }
-      }
-      return {}
-    } else {
-      let flag = 0
-      return { left, top }
+    if (Math.abs(left) > newL) {
+      left = left < 0 ? -newL : newL
     }
+
+    if (Math.abs(left) > 0.005 && Math.abs(top) > newT) {
+      top = top < 0 ? -newT+2 : newT
+    }
+
+    return { left, top }
   },
   towPointsTouches: function (e) {
     return e.touches
   },
-  // 줌이벤트시 Origin 고정시켜줌
   setOrigin: function (down) {
     return {
       down: [down[0], down[1]],
