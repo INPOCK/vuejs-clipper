@@ -74,9 +74,16 @@ const fixedMethods = {
       left = left < 0 ? -stdLeft+2 : stdLeft
     }
     // if (Math.abs(top) > newT && Math.abs(left) > 0.005) {
-    if (Math.abs(top) > stdTop || (vertical && !scale.height > areaPos.width)) {
+    // console.log(Math.abs(top) > stdTop, (vertical || !scale.height > areaPos.width))
+    if (Math.abs(top) > stdTop && vertical) {
+      top = top < 0 ? -stdTop+2 : stdTop
+    } else if (Math.abs(top) > stdTop && !vertical && scale.height > areaPos.height) { 
       top = top < 0 ? -stdTop+2 : stdTop
     }
+    // if (Math.abs(top) > stdTop || (vertical && !scale.height > areaPos.width)) {
+    //   // 클리퍼가 작은데 이미지 경계에 닿았을 경우 
+    //   top = top < 0 ? -stdTop+2 : stdTop
+    // }
     
     return { left, top }
   },
