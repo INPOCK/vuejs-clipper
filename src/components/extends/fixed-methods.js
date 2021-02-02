@@ -56,25 +56,26 @@ const fixedMethods = {
     // console.log(- down.clientX + down.left, - down.clientY + down.top)
     
 
-    // 이미지 경계 기준값
-    let newL = 0
-    let newT = 0
-    
-    if (rotate === 0 || rotate === 180) {
-      // 기본, 180도
-      newL = (scale.width - areaPos.width) / 2
-      newT = (scale.height - areaPos.height) / 2
-    } else {
-      // 90도, 270도
-      newT = (scale.width - areaPos.height) / 2
-      newL = (scale.height - areaPos.width) / 2
+    // 이미지 경계 기준값 변수 (0도, 180도)
+    let stdLeft = (scale.width - areaPos.width) / 2
+    let stdTop = (scale.height - areaPos.height) / 2
+    let vertical = false
+    if ((rotate/90)%2) {
+      // 90도, 270도일 경우 기준값
+      stdTop = (scale.width - areaPos.height) / 2
+      stdLeft = (scale.height - areaPos.width) / 2
+      vertical = true
     }
 
-    if (Math.abs(left) > newL) {
-      left = left < 0 ? -newL : newL
+    // scale: 사진, areaPos: 클리퍼
+    // 이미지 경계값 넘어가면 경계값으로 고정시킴
+    if (Math.abs(left) > stdLeft && !(vertical && scale.height < areaPos.width)) {
+      // 드래그 X 값이 이미지의 X 경계값보다 큼 && 수직일 때 클리퍼의 너비가 사진의 높이보다 작거나 같을 때 
+      left = left < 0 ? -stdLeft+2 : stdLeft
     }
-    if (Math.abs(top) > newT && Math.abs(left) > 0.005) {
-      top = top < 0 ? -newT+2 : newT
+    // if (Math.abs(top) > newT && Math.abs(left) > 0.005) {
+    if (Math.abs(top) > stdTop || (vertical && !scale.height > areaPos.width)) {
+      top = top < 0 ? -stdTop+2 : stdTop
     }
     
     return { left, top }
