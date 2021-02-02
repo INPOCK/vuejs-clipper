@@ -100,7 +100,7 @@ export default {
       concatMap(
         () => this.mousemove$.pipe(tap(this.prevent), takeUntil(this.mouseup$)),
         (down, move) => {
-          return { down, move }
+          return { down, move, rotate:this.rotate }
         }
       )
     )
@@ -275,7 +275,6 @@ export default {
     },
     scaleStyle: function () {
       let width = this.bgWH$
-      // console.log(width)
       return {
         transform: `scale(${width}) !important`
       }
@@ -283,18 +282,6 @@ export default {
     translateStyle: function () {
       let left = this.bgTL$.left
       let top = this.bgTL$.top
-
-      // 두 비율 값 전부 고정 값
-
-      // let stdLeft = 17.4
-      // let stdTop = 6.2
-      // if (Math.abs(left) > stdLeft) {
-      //   left = left < 0 ? -stdLeft : stdLeft
-      // }
-      // if (Math.abs(top) > stdTop) {
-      //   top = top < 0 ? -stdTop : stdTop
-      // }
-
       return {
         transform: `translate(${left}%,${top}%) !important`
       }

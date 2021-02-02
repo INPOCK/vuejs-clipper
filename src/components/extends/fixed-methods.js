@@ -36,38 +36,47 @@ const fixedMethods = {
     }
     return offset
   },
-  delta: function ({ down, move }) {
+  delta: function ({ down, move, rotate }) {
     let left = move.clientX - down.clientX + down.left
     let top = move.clientY - down.clientY + down.top
-    // console.log('Mouse Move : ', left, top)
 
     // 클리퍼 영역 
     const areaPos = this.areaEl.getBoundingClientRect()
     // 클리퍼 너비, 클리퍼 높이
     // console.log(areaPos.width, areaPos.height)
-
-    // ?
-    // const translatePos = this.translatePos()
-    // console.log(translatePos.left, translatePos.top)
-
-    // 마우스로 집은 곳 좌표
-    // console.log(- down.clientX + down.left, - down.clientY + down.top)
-
+    // 사진 영역
     const scale = this.scalePos()
     // 사진의 너비, 높이
     // console.log(scale.width, scale.height) 
 
-    let newL = (scale.width - areaPos.width) / 2
-    let newT = -(scale.top - areaPos.top)
+    // console.log('사진의 너비: ', scale.width, '사진의 높이: ', scale.height)
+    // console.log('클리퍼의 너비: ', areaPos.width, '클리퍼의 높이: ', areaPos.height)
+
+    // 마우스로 집은 곳 좌표
+    // console.log(- down.clientX + down.left, - down.clientY + down.top)
+    
+
+    // 이미지 경계 기준값
+    let newL = 0
+    let newT = 0
+    
+    if (rotate === 0 || rotate === 180) {
+      // 기본, 180도
+      newL = (scale.width - areaPos.width) / 2
+      newT = (scale.height - areaPos.height) / 2
+    } else {
+      // 90도, 270도
+      newT = (scale.width - areaPos.height) / 2
+      newL = (scale.height - areaPos.width) / 2
+    }
 
     if (Math.abs(left) > newL) {
       left = left < 0 ? -newL : newL
     }
-
-    if (Math.abs(left) > 0.005 && Math.abs(top) > newT) {
+    if (Math.abs(top) > newT && Math.abs(left) > 0.005) {
       top = top < 0 ? -newT+2 : newT
     }
-
+    
     return { left, top }
   },
   towPointsTouches: function (e) {
