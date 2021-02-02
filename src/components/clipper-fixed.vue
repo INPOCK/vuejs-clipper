@@ -117,7 +117,7 @@ export default {
             filter(e => e.touches.length === 1)
           ),
         (down, move) => {
-          return { down, move: move.touches[0] }
+          return { down, move: move.touches[0], rotate:this.rotate }
         }
       )
     )
